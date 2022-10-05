@@ -1,6 +1,6 @@
 function [out]=cshore(in)
 in=set_defaults(in);
-makcheck_in(in);
+check_in(in);
 
 for k = 1:length(in) % loop over in
   bathy=make_bathy(in(k));
