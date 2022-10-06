@@ -9,13 +9,13 @@ load ([g.name,'/data/summary_wl.mat'])
 load ([g.name,'/data/summary_lidar_science_small.mat'])
 %
 
-lidar_inds = 1:2:20;
-%lidar_inds = 1:1:length(lidar);
+%lidar_inds = 1:2:20;
+lidar_inds = 1:10:length(lidar_sm);
 i = 0;
 for j = lidar_inds
   i = i+1;
   in(i).dx     = 1;          % constant dx 
-  in(i).gamma  = .6;         % shallow water ratio of wave height to water depth
+  in(i).gamma  = .7;         % shallow water ratio of wave height to water depth
   in(i).fric_fac = .015;     % bottom friction factor
   in(i).lidar_ind = j;
 
