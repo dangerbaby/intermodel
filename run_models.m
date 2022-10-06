@@ -8,8 +8,8 @@ g.name = 'frf_runup';
 addpath(g.name)
 
 % Model model choices
-g.icshore  = 0;
-g.icshorem = 1;
+g.icshore  = 1;
+g.icshorem = 0;
 g.ixbeach  = 0;
 g.icms     = 0;
 g.ifunwave = 0;
