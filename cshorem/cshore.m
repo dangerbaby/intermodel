@@ -4,7 +4,7 @@ check_in(in);
 
 for k = 1:length(in) % loop over in
   bathy=make_bathy(in(k));
-
+  disp(['running date ',datestr(in(k).date)])
   for i = 1:length(in(k).Hrms)%loop over timesteps in the bc
 
     % energy and mom balance 

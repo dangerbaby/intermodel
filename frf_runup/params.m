@@ -10,7 +10,7 @@ load ([g.name,'/data/summary_lidar_science_small.mat'])
 %
 
 %lidar_inds = 1:2:20;
-lidar_inds = 1:10:length(lidar_sm);
+lidar_inds = 1:2:length(lidar_sm);
 i = 0;
 for j = lidar_inds
   i = i+1;
