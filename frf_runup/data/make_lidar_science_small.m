@@ -4,6 +4,7 @@ end
 
 for i = 1:length(lidar)
   lidar_sm(i).r2p = lidar(i).r2p;
+  lidar_sm(i).r2p_brodie = lidar(i).r2p;
   lidar_sm(i).date = lidar(i).date;
   lidar_sm(i).frf_xi =  lidar(i).frf_xi;
   lidar_sm(i).zb_full =  lidar(i).zb_full;

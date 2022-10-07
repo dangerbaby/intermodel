@@ -9,8 +9,8 @@ load ([g.name,'/data/summary_wl.mat'])
 load ([g.name,'/data/summary_lidar_science_small.mat'])
 %
 
-%lidar_inds = 1:2:20;
-lidar_inds = 1:2:length(lidar_sm);
+lidar_inds = 1:2:20;
+%lidar_inds = 1:2:length(lidar_sm);
 i = 0;
 for j = lidar_inds
   i = i+1;
@@ -38,5 +38,13 @@ for j = lidar_inds
 
   dat(i).date = lidar_sm(j).date;
   dat(i).r2p  = lidar_sm(j).r2p;
+  dat(i).r2p_brodie  = lidar_sm(j).r2p;
+  dat(i).sws = interp_brad (x,zb-in(i).swlbc);
+  L0 = 9.81*in(i).Tp^2/(2*pi)
+  inds = find(abs(x-dat(i).sws)<L0);
+  dzbdx = cdiff(in(i).dx,zb);
+  dat(i).beta_f = mean(dzbdx(inds));
+  
+
 end
 
