@@ -1,11 +1,11 @@
 function [out] = run_xbeach(g,in2)
 if g.ixbeach==0;out = [];return;end
 disp('Running XBeach')
-maindir = '/home/elizabeth/Desktop/intermodel/intermodel/';
+maindir = pwd;
 cd(maindir)
-addpath(genpath([maindir,'xbeach']))
-exec_cmd = [maindir,'xbeach/xbeachlnk'];
-outdir = [maindir,'xbeach/xbeach_sims/'];
+addpath(genpath([maindir,'/xbeach']))
+exec_cmd = [maindir,'/xbeach/xbeachlnk'];
+outdir = [maindir,'/xbeach/xbeach_sims/'];
 mkdir(outdir)
 nonhydrostatic = 0;
 
@@ -13,7 +13,7 @@ nonhydrostatic = 0;
 
 % For each lidar gauge
 SLR = 0;
-for i = 1:length(in2)
+for i = 1:2%length(in2)
 
   % make temp ith working dir
   cd(outdir)
@@ -28,7 +28,7 @@ for i = 1:length(in2)
   BC.Hs = ones(numel(BC.ts_datenum)+1,1)*in2(i).Hrms;
   BC.Tp = ones(numel(BC.ts_datenum)+1,1)*in2(i).Tp;
   BC.WL = ones(size(BC.ts_datenum)).*in2(i).swlbc; % water level at seaward boundary in meters
-  BC.angle = in2(i).angle; % constant incident wave angle at seaward boundary in
+  BC.angle = 520;%in2(i).angle; % constant incident wave angle at seaward boundary in
   
   % Create tide forcing file
   clear tide_data
@@ -64,6 +64,7 @@ for i = 1:length(in2)
   if nonhydrostatic == 1
   in = xs_set(in, 'nonh', 1); %change this flag if want the nonhydrostatic correction
   end
+  %in = xs_set(in, 'posdwn', -1);
   in = xs_set(in, 'sedtrans', 0);
   in = xs_set(in, 'morphology', 0);
   in = xs_set(in, 'thetamin', round(180+BC.angle-45));
@@ -87,7 +88,8 @@ for i = 1:length(in2)
 
   % run model
   system(exec_cmd);
- 
+  
+  
   % Read and Save Runup Output
   xbo = xb_read_output;
   for jj = 1:length(xbo.data)
@@ -98,6 +100,17 @@ for i = 1:length(in2)
   dat = xbo.data(id_runup).value;
   xbrunup = dat;
   save xbrunup.mat xbrunup 
+  out(i).results = xbo;
 
+  % calculate R2%
+  runup_tmp = xbo.data(id_runup).value(:,end);
+  out(i).runup.runup_mean  = nanmean(runup_tmp);
+  out(i).runup.runup_std   = nanstd(runup_tmp);
+  out(i).runup.runup_13    = out(i).runup.runup_mean +2*out(i).runup.runup_std;
+  out(i).runup.runup_2p    = out(i).runup.runup_mean + 1.4*(out(i).runup.runup_13-out(i).runup.runup_mean);
 
+  
+  cd(maindir)
+
+  
 end

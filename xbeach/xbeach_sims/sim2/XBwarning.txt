@@ -1,0 +1,4 @@
+ Warning: Specification of instat using parameter 'wbctype'
+   Unknown, unused or multiple statements of parameterZS0 inparams.txt
+  Large amounts of energy (100.0%) fall outside computational domain at the offshore boundary
+  Check specification of input wave angles and wave directional grid

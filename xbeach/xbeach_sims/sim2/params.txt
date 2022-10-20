@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% XBeach parameter settings input file                                     %%%
 %%%                                                                          %%%
-%%% date:     20-Oct-2022 16:29:45                                           %%%
+%%% date:     20-Oct-2022 15:43:25                                           %%%
 %%% function: xb_write_params                                                %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -26,10 +26,10 @@ xfile       = x.grd
 yfile       = y.grd
 xori        = 0
 yori        = 0
-thetamin    = 655
-thetamax    = 745
+thetamin    = 119
+thetamax    = 209
 dtheta      = 10
-thetanaut   = 0
+thetanaut   = 1
 
 %%% Initial conditions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

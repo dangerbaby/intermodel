@@ -7,9 +7,9 @@
   **********************************************************
  
   Simulation started: YYYYMMDD    hh:mm:ss     time zone (UTC)
-                      20221020  16:29:45     -0400
+                      20221020  15:43:25     -0400
  
-    running in:/home/elizabeth/Desktop/intermodel/intermodel/xbeach/xbeach_sims/sim1
+    running in:/home/elizabeth/Desktop/intermodel/intermodel/xbeach/xbeach_sims/sim2
   General Input Module
   Reading input parameters:
    XBeach reading fromparams.txt
@@ -50,9 +50,9 @@
                      xfile =x.grd
                      yfile =y.grd
                         nz =1 (no record found, default value used)
-                  thetamin =655.0000 Warning: value > recommended value of360.0000
-                  thetamax =745.0000 Warning: value > recommended value of360.0000
-                 thetanaut =0
+                  thetamin =119.0000
+                  thetamax =209.0000
+                 thetanaut =1
                     dtheta =10.0000
   --------------------------------
   Model time parameters:
@@ -218,17 +218,17 @@
   Interpreting spectrum at location1
   Values calculated from interpolated spectrum:
   Hm0       =.39 m
-  Trep      =4.93 s
-  Mean dir  =160.47 degN
-  Overall Trep from all spectra calculated:4.93 s
+  Trep      =5.07 s
+  Mean dir  =344.80 degN
+  Overall Trep from all spectra calculated:5.07 s
   Calculating Fourier components
-  5.0% done
-  10.1% done
+  5.1% done
+  10.0% done
   15.0% done
-  20.0% done
-  25.1% done
+  20.1% done
+  25.0% done
   30.0% done
-  35.0% done
+  35.1% done
   40.1% done
   45.0% done
   50.0% done
@@ -237,10 +237,10 @@
   65.0% done
   70.1% done
   75.0% done
-  80.1% done
+  80.0% done
   85.1% done
-  90.0% done
-  95.1% done
+  90.1% done
+  95.0% done
   100.0% done
   Large amounts of energy (100.0%) fall outside computational domain at the offshore boundary
   Check specification of input wave angles and wave directional grid
@@ -260,3 +260,113 @@
   Wave bin4 containsNaN% of total energy
   Wave bin5 containsNaN% of total energy
   Wave bin6 containsNaN% of total energy
+  Wave bin7 containsNaN% of total energy
+  Wave bin8 containsNaN% of total energy
+  Wave bin9 containsNaN% of total energy
+   Writing wave energy toE_series00001.bcf ...
+  file done
+  Calculating primary wave interaction
+  5.1% done
+  10.0% done
+  15.0% done
+  19.7% done
+  24.2% done
+  28.3% done
+  32.3% done
+  36.2% done
+  39.9% done
+  43.6% done
+  47.1% done
+  50.5% done
+  53.9% done
+  57.2% done
+  60.5% done
+  63.6% done
+  67.5% done
+  71.6% done
+  75.7% done
+  79.2% done
+  82.4% done
+  86.4% done
+  90.3% done
+  93.8% done
+  98.0% done
+  Calculating flux at boundary
+  Flux1 of1
+   Writing long wave mass flux toq_series00001.bcf ...
+  file done
+  --------------------------------
+  Spectral wave boundary conditions complete
+  --------------------------------
+  Boundary conditions complete, starting computation
+  Simulation  0.0 percent complete. Average dt  0.043 seconds
+  Time remaining144 hours and  9 minutes
+  Simulation  3.4 percent complete. Average dt  0.043 seconds
+  Time remaining 14 minutes
+  Simulation  7.4 percent complete. Average dt  0.043 seconds
+  Time remaining  7 minutes and 24 seconds
+  Simulation 10.9 percent complete. Average dt  0.043 seconds
+  Time remaining  5 minutes and 37 seconds
+  Simulation 15.1 percent complete. Average dt  0.043 seconds
+  Time remaining  4 minutes and 14 seconds
+  Simulation 18.9 percent complete. Average dt  0.043 seconds
+  Time remaining  3 minutes and 38 seconds
+  Simulation 23.0 percent complete. Average dt  0.043 seconds
+  Time remaining  3 minutes and  4 seconds
+  Simulation 26.5 percent complete. Average dt  0.043 seconds
+  Time remaining  2 minutes and 53 seconds
+  Simulation 30.3 percent complete. Average dt  0.043 seconds
+  Time remaining  2 minutes and 31 seconds
+  Simulation 34.1 percent complete. Average dt  0.042 seconds
+  Time remaining  2 minutes and 17 seconds
+  Simulation 37.3 percent complete. Average dt  0.042 seconds
+  Time remaining  2 minutes and 16 seconds
+  Simulation 40.1 percent complete. Average dt  0.042 seconds
+  Time remaining  2 minutes and 12 seconds
+  Simulation 43.0 percent complete. Average dt  0.042 seconds
+  Time remaining  2 minutes and  4 seconds
+  Simulation 45.8 percent complete. Average dt  0.042 seconds
+  Time remaining  1 minutes and 56 seconds
+  Simulation 48.7 percent complete. Average dt  0.042 seconds
+  Time remaining  1 minutes and 49 seconds
+  Simulation 51.6 percent complete. Average dt  0.042 seconds
+  Time remaining  1 minutes and 42 seconds
+  Simulation 54.3 percent complete. Average dt  0.042 seconds
+  Time remaining  1 minutes and 37 seconds
+  Simulation 57.2 percent complete. Average dt  0.042 seconds
+  Time remaining  1 minutes and 29 seconds
+  Simulation 60.0 percent complete. Average dt  0.042 seconds
+  Time remaining  1 minutes and 22 seconds
+  Simulation 62.8 percent complete. Average dt  0.042 seconds
+  Time remaining  1 minutes and 17 seconds
+  Simulation 65.5 percent complete. Average dt  0.042 seconds
+  Time remaining  1 minutes and 13 seconds
+  Simulation 68.2 percent complete. Average dt  0.042 seconds
+  Time remaining  1 minutes and  5 seconds
+  Simulation 71.1 percent complete. Average dt  0.042 seconds
+  Time remaining 58 seconds
+  Simulation 73.9 percent complete. Average dt  0.042 seconds
+  Time remaining 52 seconds
+  Simulation 76.7 percent complete. Average dt  0.042 seconds
+  Time remaining 48 seconds
+  Simulation 79.5 percent complete. Average dt  0.042 seconds
+  Time remaining 41 seconds
+  Simulation 82.3 percent complete. Average dt  0.042 seconds
+  Time remaining 35 seconds
+  Simulation 85.2 percent complete. Average dt  0.042 seconds
+  Time remaining 29 seconds
+  Simulation 88.0 percent complete. Average dt  0.042 seconds
+  Time remaining 24 seconds
+  Simulation 90.7 percent complete. Average dt  0.042 seconds
+  Time remaining 19 seconds
+  Simulation 93.4 percent complete. Average dt  0.042 seconds
+  Time remaining 13 seconds
+  Simulation 96.2 percent complete. Average dt  0.042 seconds
+  Time remaining  7 seconds
+  Simulation 99.0 percent complete. Average dt  0.042 seconds
+  Time remaining  2 seconds
+   Duration   :   213.64288299999998       seconds
+   Timesteps  :       64323
+   Average dt :   4.1975654120610044E-002  seconds
+   Unit speed :   5.8682108115023942E-006  seconds/1
+  End of program xbeach
