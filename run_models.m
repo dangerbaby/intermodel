@@ -2,6 +2,7 @@
 % Some housecleaning
 clear all;close all
 addpath(genpath('mfiles'));
+addpath(genpath('cshorem')); % to access mfiles like 'interp_brad'
 
 % Name assign for site
 g.name = 'frf_runup';
@@ -10,10 +11,10 @@ addpath(g.name)
 % Model model choices
 g.icshore   = 0;
 g.icshorem  = 0;
-g.ixbeach   = 0;
+g.ixbeach   = 1;
 g.icms      = 0;
 g.ifunwave  = 0;
-g.istockton = 1;
+g.istockton = 0;
 
 %set some input params like timing and bc's
 [in dat]=params(g);
@@ -22,7 +23,7 @@ g.istockton = 1;
 out_cs       = run_cshore(g,in);
 out_csm      = run_cshorem(g,in);
 out_stockton = run_stockton(g,in);
-
+out_xbeach   = run_xbeach(g,in);
 
 
 
