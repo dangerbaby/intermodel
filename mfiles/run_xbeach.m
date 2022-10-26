@@ -8,12 +8,12 @@ exec_cmd = [maindir,'/xbeach/xbeachlnk'];
 outdir = [maindir,'/xbeach/xbeach_sims/'];
 mkdir(outdir)
 nonhydrostatic = 0;
-
+frf_dir_offset = 72; 
 
 
 % For each lidar gauge
 SLR = 0;
-for i = 1:2%length(in2)
+for i = 1:length(in2)
 
   % make temp ith working dir
   cd(outdir)
@@ -28,7 +28,8 @@ for i = 1:2%length(in2)
   BC.Hs = ones(numel(BC.ts_datenum)+1,1)*in2(i).Hrms;
   BC.Tp = ones(numel(BC.ts_datenum)+1,1)*in2(i).Tp;
   BC.WL = ones(size(BC.ts_datenum)).*in2(i).swlbc; % water level at seaward boundary in meters
-  BC.angle = 520;%in2(i).angle; % constant incident wave angle at seaward boundary in
+  tmp_angle = wrapTo360(frf_dir_offset-in2(i).angle);
+  BC.angle = tmp_angle; % constant incident wave angle at seaward boundary in
   
   % Create tide forcing file
   clear tide_data
@@ -42,7 +43,7 @@ for i = 1:2%length(in2)
   clear jonswap_data
   nsteps = 2;
   for ix = 1:numel(BC.Hs)
-    jonswap_data(ix,:) = [BC.Hs(ix) BC.Tp(ix) BC.angle 3.3 20 round(median(dt_target)*nsteps) 1];
+    jonswap_data(ix,:) = [BC.Hs(ix) BC.Tp(ix) round(180+BC.angle) 3.3 20 round(median(dt_target)*nsteps) 1];
   end
   iddel = find(jonswap_data(:,1) == 0);
   jonswap_data(iddel,:) = [];
