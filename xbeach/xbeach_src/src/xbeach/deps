@@ -1,0 +1,2 @@
+xbeach-input.o: input.F90  
+xbeach-xbeach.o: xbeach.F90  xbeach-input.o
