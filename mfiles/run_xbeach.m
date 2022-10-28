@@ -13,7 +13,7 @@ frf_dir_offset = 72;
 
 % For each lidar gauge
 SLR = 0;
-for i = 1:length(in2)
+for i = 1%:length(in2)
 
   % make temp ith working dir
   cd(outdir)
@@ -28,7 +28,8 @@ for i = 1:length(in2)
   BC.Hs = ones(numel(BC.ts_datenum)+1,1)*in2(i).Hrms;
   BC.Tp = ones(numel(BC.ts_datenum)+1,1)*in2(i).Tp;
   BC.WL = ones(size(BC.ts_datenum)).*in2(i).swlbc; % water level at seaward boundary in meters
-  tmp_angle = wrapTo360(frf_dir_offset-in2(i).angle);
+  %tmp_angle = wrapTo360(frf_dir_offset-in2(i).angle); % requires mapping toolbox
+  tmp_angle = wrapdeg(in2(i).angle);
   BC.angle = tmp_angle; % constant incident wave angle at seaward boundary in
   
   % Create tide forcing file
@@ -61,6 +62,8 @@ for i = 1:length(in2)
   in = xb_generate_model('bathy', {'x', XNEW, 'y', YNEW, 'z', ZNEW, 'optimize', false});
   in = xs_set(in, 'bedfriction', 'manning');
   in = xs_set(in, 'bedfriccoef', in2(i).fric_fac);
+  in = xs_set(in, 'gamma', in2(i).gamma);
+  in = xs_set(in, 'hmin', 0.05); % min water depth for flow return
   in = xs_set(in, 'vegetation', 0);
   if nonhydrostatic == 1
   in = xs_set(in, 'nonh', 1); %change this flag if want the nonhydrostatic correction
