@@ -13,7 +13,7 @@ frf_dir_offset = 72;
 
 % For each lidar gauge
 SLR = 0;
-for i = 1%:length(in2)
+for i = 1:length(in2)
 
   % make temp ith working dir
   cd(outdir)
