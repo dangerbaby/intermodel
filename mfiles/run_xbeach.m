@@ -4,8 +4,9 @@ disp('Running XBeach')
 maindir = pwd;
 cd(maindir)
 addpath(genpath([maindir,'/xbeach']))
-exec_cmd = [maindir,'/xbeach/xbeachlnk'];
-outdir = [maindir,'/xbeach/xbeach_sims/'];
+exec_cmd = [maindir,'/xbeach/xbeach_src/src/xbeach/xbeach'];
+%exec_cmd = [maindir,'/xbeach/xbeachlnk'];
+outdir = [maindir,'/xbeach/xbeach_sims_nobind_changewrapdeg/'];
 mkdir(outdir)
 nonhydrostatic = 0;
 frf_dir_offset = 72; 
@@ -13,7 +14,7 @@ frf_dir_offset = 72;
 
 % For each lidar gauge
 SLR = 0;
-for i = 1:length(in2)
+for i = 1%:length(in2)
 
   % make temp ith working dir
   cd(outdir)
@@ -29,7 +30,7 @@ for i = 1:length(in2)
   BC.Tp = ones(numel(BC.ts_datenum)+1,1)*in2(i).Tp;
   BC.WL = ones(size(BC.ts_datenum)).*in2(i).swlbc; % water level at seaward boundary in meters
   %tmp_angle = wrapTo360(frf_dir_offset-in2(i).angle); % requires mapping toolbox
-  tmp_angle = wrapdeg(in2(i).angle);
+  tmp_angle = wrapdeg(frf_dir_offset - in2(i).angle);
   BC.angle = tmp_angle; % constant incident wave angle at seaward boundary in
   
   % Create tide forcing file
@@ -67,6 +68,7 @@ for i = 1:length(in2)
   in = xs_set(in, 'vegetation', 0);
   if nonhydrostatic == 1
   in = xs_set(in, 'nonh', 1); %change this flag if want the nonhydrostatic correction
+  in = xs_set(in, 'wavemodel','nonh');
   end
   %in = xs_set(in, 'posdwn', -1);
   in = xs_set(in, 'sedtrans', 0);
