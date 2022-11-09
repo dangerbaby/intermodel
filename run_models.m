@@ -9,12 +9,13 @@ g.name = 'frf_runup';
 addpath(g.name)
 
 % Model model choices
-g.icshore   = 1;
-g.icshorem  = 1;
-g.ixbeach   = 1;
+g.icshore   = 0;
+g.icshorem  = 0;
+g.ixbeach   = 0;
 g.icms      = 0;
 g.ifunwave  = 0;
 g.istockton = 0;
+g.ixbeachnonhydro = 1;
 
 %set some input params like timing and bc's
 [in dat]=params(g);
@@ -24,7 +25,7 @@ g.istockton = 0;
 %out_csm      = run_cshorem(g,in);
 out_stockton = run_stockton(g,in);
 out_xbeach   = run_xbeach(g,in);
-
+out_xbeachnonhydro = run_xbeachnonhydro(g,in);
 
 
 
