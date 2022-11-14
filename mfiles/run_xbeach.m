@@ -4,9 +4,9 @@ disp('Running XBeach')
 maindir = pwd;
 cd(maindir)
 addpath(genpath([maindir,'/xbeach']))
-exec_cmd = [maindir,'/xbeach/xbeach_src/src/xbeach/xbeach'];
-%exec_cmd = [maindir,'/xbeach/xbeachlnk'];
-outdir = [maindir,'/xbeach/xbeach_sims_nobind_changewrapdeg/'];
+%exec_cmd = [maindir,'/xbeach/xbeach_src/src/xbeach/xbeach'];
+exec_cmd = [maindir,'/xbeach/xbeachlnk'];
+outdir = [maindir,'/xbeach/xbeach_sims/'];
 mkdir(outdir)
 nonhydrostatic = 0;
 frf_dir_offset = 72; 
@@ -14,7 +14,7 @@ frf_dir_offset = 72;
 
 % For each lidar gauge
 SLR = 0;
-for i = 1%:length(in2)
+for i = 1:length(in2)
 
   % make temp ith working dir
   cd(outdir)
@@ -110,11 +110,33 @@ for i = 1%:length(in2)
 
   % calculate R2%
   runup_tmp = xbo.data(id_runup).value(:,end);
-  out(i).runup.runup_mean  = nanmean(runup_tmp);
-  out(i).runup.runup_std   = nanstd(runup_tmp);
-  out(i).runup.runup_13    = out(i).runup.runup_mean +2*out(i).runup.runup_std;
-  out(i).runup.runup_2p    = out(i).runup.runup_mean + 1.4*(out(i).runup.runup_13-out(i).runup.runup_mean);
+  time_tmp = xbo.data(id_runup).value(:,1);
 
+  % Rayleigh dist assumption
+  %out(i).runup.runup_mean  = nanmean(runup_tmp);
+  %out(i).runup.runup_std   = nanstd(runup_tmp);
+  %out(i).runup.runup_13    = out(i).runup.runup_mean +2*out(i).runup.runup_std;
+  %out(i).runup.runup_2p    = out(i).runup.runup_mean + 1.4*(out(i).runup.runup_13-out(i).runup.runup_mean);
+
+  % Simple hist method
+  NBINS = 20;
+  z = runup_tmp;
+  t = time_tmp; 
+  dt = t(2)-t(1);
+  z_mean = nanmean(z);
+  z_nomean = z-z_mean;
+  [runup_crests] = upcross_runup(z_nomean); % does not include mean yet
+  R_peaks = runup_crests + z_mean; % add mean back
+  [N,edges]=histcounts(R_peaks,NBINS); 
+  centers = .5*(edges(2:end)+edges(1:end-1));
+  dR = edges(2)-edges(1);
+  N_norm = N/(sum(N)*dR);
+  cdf = cumsum(N_norm*dR);
+  thresh = 1 - .02;  % for 2% runup
+  crsspt = find((cdf(2:end)-thresh).*(cdf(1:end-1)-thresh)<=0);
+  crsspt = crsspt(1);
+  r2p = interp1(cdf(crsspt:crsspt+1),centers(crsspt:crsspt+1),thresh);
+  out(i).runup_2p = r2p;  
   
   cd(maindir)
 
