@@ -1,2 +1,0 @@
- Warning: Specification of instat using parameter 'wbctype'
-   Unknown, unused or multiple statements of parameterZS0 inparams.txt

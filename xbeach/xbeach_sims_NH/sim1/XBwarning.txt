@@ -1,9 +1,0 @@
- Warning: Specification of nonh using parameter 'wavemodel'
- Warning: Specification of instat using parameter 'wbctype'
-   Unknown, unused or multiple statements of parameterTHETAMIN inparams.txt
-   Unknown, unused or multiple statements of parameterTHETAMAX inparams.txt
-   Unknown, unused or multiple statements of parameterDTHETA inparams.txt
-   Unknown, unused or multiple statements of parameterTHETANAUT inparams.txt
-   Unknown, unused or multiple statements of parameterZS0 inparams.txt
-   Unknown, unused or multiple statements of parameterGAMMA inparams.txt
-  Warning: shallow water so long wave variance is reduced using par%nmax
