@@ -11,6 +11,7 @@ load ([g.name,'/data/summary_lidar_science_small.mat'])
 
 lidar_inds = 1:2:20;
 lidar_inds = 1:2:length(lidar_sm);
+%lidar_inds = linspace(1,length(lidar_sm),5);
 i = 0;
 for j = lidar_inds
   i = i+1;
@@ -44,7 +45,8 @@ for j = lidar_inds
   inds = find(abs(x-dat(i).sws)<L0);
   dzbdx = cdiff(in(i).dx,zb);
   in(i).beta_f = mean(dzbdx(inds));
-  
+  in(i).Ib = iribarren ([in(i).Hrms]*sqrt(2),[in(i).Tp],[in(i).beta_f]);
+
 
 end
 

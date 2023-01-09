@@ -1,0 +1,10 @@
+%function [Ib] = iribarren (H,T,beta)
+%H = significant waveheight in deep H0, or at beraking Hb [m]
+%T = peak period
+%beta = beach slope
+function [Ib] = iribarren (H,T,beta)
+H=reshape(H,1,[]);
+T=reshape(T,1,[]);
+L0 = 9.81*T.^2./(2*pi);
+beta=reshape(beta,1,[]);
+Ib  = tan(beta)./sqrt(H./L0);

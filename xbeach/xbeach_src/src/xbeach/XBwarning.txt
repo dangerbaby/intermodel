@@ -1,0 +1,4 @@
+ Warning: Specification of instat using parameter 'wbctype'
+                  thetamin =475.0000 Warning: value > recommended value of360.0000
+                  thetamax =565.0000 Warning: value > recommended value of360.0000
+   Unknown, unused or multiple statements of parameterZS0 inparams.txt
