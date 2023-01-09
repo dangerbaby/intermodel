@@ -43,6 +43,7 @@ for k = 1:length(in) % loop over in
     %out(k).qx(i,:)      = sed.aveqx;
     %out(k).qbx0(i,:)    = sed.qbx0;
     out(k).sed(i)       = sed;
+    out(k).A0           =in(k).A0;
 
     % update bathy
     bathy.zb = zbnew;

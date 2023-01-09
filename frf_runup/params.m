@@ -45,7 +45,8 @@ for j = lidar_inds
   inds = find(abs(x-dat(i).sws)<L0);
   dzbdx = cdiff(in(i).dx,zb);
   in(i).beta_f = mean(dzbdx(inds));
-  
+  in(i).Ib = iribarren ([in(i).Hrms]*sqrt(2),[in(i).Tp],[in(i).beta_f]);
+
 
 end
 
