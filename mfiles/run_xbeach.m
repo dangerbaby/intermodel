@@ -6,7 +6,7 @@ cd(maindir)
 addpath(genpath([maindir,'/xbeach']))
 %exec_cmd = [maindir,'/xbeach/xbeach_src/src/xbeach/xbeach'];
 exec_cmd = [maindir,'/xbeach/xbeachlnk'];
-outdir = [maindir,'/xbeach/xbeach_sims/'];
+outdir = [maindir,'/xbeach/xbeach_sims_fixHs/'];
 mkdir(outdir)
 nonhydrostatic = 0;
 frf_dir_offset = 72; 
@@ -26,7 +26,7 @@ for i = 1:length(in2)
   dt_target = [1/24]*86400;
   tstart = 0;
   BC.ts_datenum = tstart*[1:1+1/24];
-  BC.Hs = ones(numel(BC.ts_datenum)+1,1)*in2(i).Hrms;
+  BC.Hs = sqrt(2)*ones(numel(BC.ts_datenum)+1,1)*in2(i).Hrms;
   BC.Tp = ones(numel(BC.ts_datenum)+1,1)*in2(i).Tp;
   BC.WL = ones(size(BC.ts_datenum)).*in2(i).swlbc; % water level at seaward boundary in meters
   %tmp_angle = wrapTo360(frf_dir_offset-in2(i).angle); % requires mapping toolbox
@@ -112,12 +112,6 @@ for i = 1:length(in2)
   runup_tmp = xbo.data(id_runup).value(:,end);
   time_tmp = xbo.data(id_runup).value(:,1);
 
-  % Rayleigh dist assumption
-  %out(i).runup.runup_mean  = nanmean(runup_tmp);
-  %out(i).runup.runup_std   = nanstd(runup_tmp);
-  %out(i).runup.runup_13    = out(i).runup.runup_mean +2*out(i).runup.runup_std;
-  %out(i).runup.runup_2p    = out(i).runup.runup_mean + 1.4*(out(i).runup.runup_13-out(i).runup.runup_mean);
-
   % Simple hist method
   NBINS = 20;
   z = runup_tmp;
@@ -140,5 +134,6 @@ for i = 1:length(in2)
   
   cd(maindir)
 
+  end
   
 end

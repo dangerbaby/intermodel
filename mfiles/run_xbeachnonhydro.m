@@ -6,16 +6,16 @@ cd(maindir)
 addpath(genpath([maindir,'/xbeach']))
 %exec_cmd = [maindir,'/xbeach/xbeach_src/src/xbeach/xbeach'];
 exec_cmd = [maindir,'/xbeach/xbeachlnk'];
-outdir = [maindir,'/xbeach/xbeach_sims_NH/'];
+outdir = [maindir,'/xbeach/xbeach_sims_NH_fixHs/'];
 mkdir(outdir)
 nonhydrostatic = 1;
 frf_dir_offset = 72; 
-
+  
 
 % For each lidar gauge
 SLR = 0;
-for i = 1%:length(in2)
-
+for i = 1:length(in2)
+  
   % make temp ith working dir
   cd(outdir)
   simdir = ['./sim',num2str(i)]; 
@@ -23,10 +23,10 @@ for i = 1%:length(in2)
   cd(simdir)
  
   % define parameters
-  dt_target = [1/24]*86400;
+  dt_target = (1/24)*86400;
   tstart = 0;
   BC.ts_datenum = tstart*[1:1+1/24];
-  BC.Hs = ones(numel(BC.ts_datenum)+1,1)*in2(i).Hrms;
+  BC.Hs = sqrt(2).*ones(numel(BC.ts_datenum)+1,1)*in2(i).Hrms;
   BC.Tp = ones(numel(BC.ts_datenum)+1,1)*in2(i).Tp;
   BC.WL = ones(size(BC.ts_datenum)).*in2(i).swlbc; % water level at seaward boundary in meters
   %tmp_angle = wrapTo360(frf_dir_offset-in2(i).angle); % requires mapping toolbox
@@ -52,11 +52,8 @@ for i = 1%:length(in2)
   jonswap_data(end+1,:) = jonswap_data(end,:);
   
   % Create bathy files
-  xcoarse = in2(i).x;
-  zcoarse = in2(i).zb;
-  DXNEW = 0.1;    % reduce cross-shore resolution for NH simulations
-  XNEW = min(xcoarse):DXNEW:max(xcoarse);
-  ZNEW = interp1(xcoarse,zcoarse,XNEW);
+  XNEW = in2(i).x;
+  ZNEW = in2(i).zb;
   YNEW = zeros(size(XNEW));
   save('bed.dep' ,'ZNEW', '-ascii')
   save('x.grd' ,'XNEW', '-ascii')
@@ -72,6 +69,10 @@ for i = 1%:length(in2)
   if nonhydrostatic == 1
   in = xs_set(in, 'nonh', 1); %change this flag if want the nonhydrostatic correction
   in = xs_set(in, 'wavemodel','nonh');
+  in = xs_set(in,'nonhspectrum+',1);
+  in = xs_set(in,'nmax',1.0);
+  %in = xs_set(in,'wbctype','ts_nonh');
+  in = xs_set(in,'swrunup','1');
   end
   %in = xs_set(in, 'posdwn', -1);
   in = xs_set(in, 'sedtrans', 0);
@@ -87,39 +88,104 @@ for i = 1%:length(in2)
   in = xs_set(in, 'zs0file', 'tide.txt');
   in = xs_set(in, 'tintp', 1);        
   in = xs_set(in, 'tintm', 900);
-  in = xs_set(in, 'tintg', 900);
-  in = xs_set(in, 'rugdepth', 0.1);
+  in = xs_set(in, 'tintg', 1);            % global output timestep
+  in = xs_set(in, 'rugdepth', 0.01);
   in = xs_set(in, 'nrugauge',{'-500 0'});
   in = xs_set(in, 'globalvar', {'zs', 'zb', 'H'});
   xb_write_input('params.txt', in)
   save('jonswap.txt', 'jonswap_data', '-ascii')
-
+  if nonhydrostatic
+    %copyfile nh_series00001.bcf boun_u.bcf
+  end
 
   % run model
   system(exec_cmd);
-  
-  
-  % Read and Save Runup Output
+
+  % save data in structure (also done in read_xbeachnonhydro, in case this fails somewhere)
   xbo = xb_read_output;
   for jj = 1:length(xbo.data)
-    if contains(xbo.data(jj).name,'rug')
-      id_runup = jj;
+    if contains(xbo.data(jj).name,'zs')
+      id_zs = jj;
+    elseif contains(xbo.data(jj).name,'rug')
+        id_runup = jj;
+    elseif contains(xbo.data(jj).name,'zb')
+      id_zb = jj;
+    elseif contains(xbo.data(jj).name,'DIMS')
+      for ii = 1:length(xbo.data(jj).value.data)
+	if contains(xbo.data(jj).value.data(ii).name,'globalx')
+	  xplot = xbo.data(jj).value.data(ii).value;
+	elseif contains(xbo.data(jj).value.data(ii).name,'globaltime')
+	  tplot = xbo.data(jj).value.data(ii).value;
+        end
+      end
+    end
+  end
+  out(i).results = xbo;
+
+  % calculate runup time series
+  MINDEP = 0.01;                       % water depth of runup line
+  bedz = squeeze(xbo.data(id_zb).value(1,1,:));
+  zs = squeeze(xbo.data(id_zs).value);
+  depthmat = zs - bedz';
+  depthmat(depthmat == 0.0) = nan;
+  depnorm = depthmat - MINDEP;
+  runup_x = nan(1,length(tplot));
+  runup_z = nan(1,length(tplot));
+  for ii = 1:length(tplot)
+    tmptmp = depnorm(ii,1:end-1).*depnorm(ii,2:end);
+    idcross = max(find(tmptmp < 0));
+    if ~isempty(idcross)
+    yplot = interp1([depthmat(ii,idcross),depthmat(ii,idcross+1)],[xplot(idcross),xplot(idcross+1)],MINDEP);
+    runup_x(ii) = yplot;
+    runup_z(ii) = interp1(xplot,zs(ii,:),yplot);
     end
   end
   dat = xbo.data(id_runup).value;
   xbrunup = dat;
   save xbrunup.mat xbrunup 
-  out(i).results = xbo;
-
-  % calculate R2%
-  runup_tmp = xbo.data(id_runup).value(:,end);
-  out(i).runup.runup_mean  = nanmean(runup_tmp);
-  out(i).runup.runup_std   = nanstd(runup_tmp);
-  out(i).runup.runup_13    = out(i).runup.runup_mean +2*out(i).runup.runup_std;
-  out(i).runup.runup_2p    = out(i).runup.runup_mean + 1.4*(out(i).runup.runup_13-out(i).runup.runup_mean);
 
   
+  % calculate R2%
+  %runup_tmp = runup_z;
+  %time_tmp = tplot;
+
+  runup_tmp = xbo.data(id_runup).value(:,end);
+  time_tmp = xbo.data(id_runup).value(:,1);
+
+  
+  % Simple hist method
+  NBINS = 20;
+  z = runup_tmp;
+  t = time_tmp; 
+  dt = t(2)-t(1);
+  z_mean = nanmean(z);
+  z_nomean = z - z_mean;
+  idnn = ~isnan(z_nomean); % find elements not nan
+  tshort = t(idnn);
+  z_nomeanshort = z_nomean(idnn);
+  z_nomean = interp1(tshort,z_nomeanshort,t);
+  [runup_crests] = upcross_runup(z_nomean); % does not include mean yet
+  R_peaks = runup_crests + z_mean; % add mean back
+  [N,edges]=histcounts(R_peaks,NBINS); 
+  centers = .5*(edges(2:end)+edges(1:end-1));
+  dR = edges(2)-edges(1);
+  N_norm = N/(sum(N)*dR);
+  cdf = cumsum(N_norm*dR);
+  thresh = 1 - .02;  % for 2% runup
+  crsspt = find((cdf(2:end)-thresh).*(cdf(1:end-1)-thresh)<=0);
+  crsspt = crsspt(1);
+  r2p = interp1(cdf(crsspt:crsspt+1),centers(crsspt:crsspt+1),thresh);
+  out(i).runup_2p = r2p;  
+
+
+  
+  % return to maindir
   cd(maindir)
 
   
 end
+end
+
+
+
+
