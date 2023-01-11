@@ -12,7 +12,7 @@ title('CMS-type Model/Data $R_{2\%}$','interpreter','latex','fontsize',fs)
 ylabel('Model','interpreter','latex','fontsize',fs)
 xlabel('Data','interpreter','latex','fontsize',fs)
 set(gca,'TickLabelInterpreter','latex')
-text(1,4,['RSE = ',num2str(rmser),'[m]'],'interpreter','latex','fontsize',fs)
+text(1,4,['RMSE = ',num2str(rmser),'[m]'],'interpreter','latex','fontsize',fs)
 if iprint;print('-dpng','-r300',['./',g.name,'/csm_mod-dat_r2p.png']);end
 
 figure;clf
@@ -26,7 +26,7 @@ ylabel('Error in $pR_{2\%}[m]$','interpreter','latex')
 xlabel('Ib','interpreter','latex')
 title('CMS-type $R_{2\%}$','interpreter','latex','fontsize',fs)
 set(gca,'TickLabelInterpreter','latex')
-%if iprint;print('-dpng','-r300',['./',g.name,'/csm_mod-dat_r2p.png']);end
+%if iprint;print('-dpng','-r300',['./',g.name,'/csm_r2p_err-Ib.png']);end
 
 
 figure;clf
