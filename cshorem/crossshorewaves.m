@@ -75,14 +75,16 @@ function [wavhyd]=crossshorewaves(in,i,bathy);
         M(j) = in.A0*9.81*(Hrms(j)/in.gamma)^2;
         iswash(j)=0;
       else
-        h(j) = h(j-1);
-        for iter = 1:5;
-          hdum = .5*(h(j-1)+h(j));
-          M(j) = max(M(j-1)-in.dx*hdum*9.81*dzbdx(j)-1*in.dx*in.cf(j)*9.81*hdum,0);
-          %disp(['iter h(j) M(j) ',num2str(iter),'  ',num2str(h(j)),'  ',num2str(M(j))])
-          h(j) = sqrt(M(j)/(in.A0*9.81));
-        end
+        % h(j) = h(j-1);
+        % for iter = 1:5;
+        %   hdum = .5*(h(j-1)+h(j));
+        %   M(j) = max(M(j-1)-in.dx*hdum*9.81*dzbdx(j)-1*in.dx*in.cf(j)*9.81*hdum,0);
+        %   %disp(['iter h(j) M(j) ',num2str(iter),'  ',num2str(h(j)),'  ',num2str(M(j))])
+        %   h(j) = sqrt(M(j)/(in.A0*9.81));
+        % end
+        h(j) = max(h(j-1)-(in.cf(j)+dzbdx(j))*in.dx/(2*in.A0),0);
         Hrms(j) = in.gamma*h(j);
+        M(j) = in.A0*9.81*(Hrms(j)/in.gamma)^2;
         eta(j) = bathy.zb(j)+h(j);
         Ef(j) = NaN;
         [k(j),n(j),c(j)] = dispersion (2*pi/in.Tp(i),h(j));
