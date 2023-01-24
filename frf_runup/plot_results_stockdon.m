@@ -39,3 +39,14 @@ set(gca,'TickLabelInterpreter','latex','fontsize',fs)
 datetick
 if iprint;print('-dpng','-r300',['./',g.name,'/stockdon_r2p_ts.png']);end
 
+figure;clf;clear hh
+ hh(1)=plot([in.date],[dat.r2p]-[in.swlbc],'r','linewidth',3);hold all
+ hh(2)=plot([in.date],[out_stockdon.r2p]-[in.swlbc],'k-','linewidth',3)
+title('$R_{2\%}$ with WL removed','interpreter','latex','fontsize',fs)
+ylabel('$R_{2\%} - \overline{\eta}$','interpreter','latex','fontsize',fs)
+set(gca,'TickLabelInterpreter','latex','fontsize',fs)
+datetick
+hl=legend(hh,'Data','Stockdon')
+axis tight
+if iprint;print('-dpng','-r300',['./',g.name,'/stockdon_r2p_nomean_ts.png']);end
+

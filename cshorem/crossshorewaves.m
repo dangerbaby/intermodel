@@ -101,11 +101,11 @@ function [wavhyd]=crossshorewaves(in,i,bathy);
     %find runup values
     z_rw = bathy.zb+in.rwh;
     sig_eta = Hrms/sqrt(8);
-    %x1 = eta+sig_eta-z_rw;
+
     x1 = interp_brad(bathy.x,eta+sig_eta-z_rw);
-    z1 = interp1(bathy.x,eta,x1);
+    z1 = interp1(bathy.x,eta+sig_eta,x1);
     x2 = interp_brad(bathy.x,eta-z_rw);
-    z2 = interp1(bathy.x,eta+sig_eta,x2);
+    z2 = interp1(bathy.x,eta,x2);
     x3 = interp_brad (bathy.x,eta-sig_eta-z_rw);
     z3 = interp1(bathy.x,eta-sig_eta,x3);
     

@@ -1,5 +1,5 @@
 iprint = 1;
-fs = 14;
+fs = 12;
 
 if ~isempty(out_csm);plot_results_csm;end
 if ~isempty(out_cs);plot_results_cs;end
