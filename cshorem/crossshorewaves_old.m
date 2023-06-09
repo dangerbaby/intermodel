@@ -1,17 +1,7 @@
 function [wavhyd]=crossshorewaves(in,i,bathy);
     dzbdx = cdiff(in.dx,bathy.zb);  
-    xsws = interp_brad(bathy.x,in.swlbc(i)-bathy.zb);
-    xmH0 = interp_brad(bathy.x,in.swlbc(i)-.5*in.Hrms(i)-bathy.zb);
-    xpH0 = interp_brad(bathy.x,in.swlbc(i)+.5*in.Hrms(i)-bathy.zb);
-    tanbeta_foreshore = in.Hrms(i)/(xpH0-xmH0);
-    if isnan(xpH0)&~isnan(xsws)
-        tanbeta_foreshore = (bathy.zb(end)-in.swlbc(i))/(bathy.x(end)-xsws);
-    end    
-    [ib,H0,L0] = surfsim(in.Hrms(i),in.swlbc(i)-bathy.zb(1),in.angle(i),in.Tp(i),tanbeta_foreshore) ;
-    %A0= 2.6 + 4.5*ib;
-    %A0= 4.5 ;
-
-    if isnan(xsws);xsws=max(in(kk).x);end
+    [xsws] = interp_brad(bathy.x,in.swlbc(i)-bathy.zb);
+    if isnan(xsws);xsws=max(in.x);end
     % initialize  
     Hrms = nan(size(bathy.x));Sxx=Hrms;Sxy=Hrms;a=Hrms;Db=Hrms;
     Hm=Hrms;Efr=Hrms;Dr=Hrms;c=Hrms;Er=Hrms;tau_y=Hrms;dtaudv=Hrms;Q=Hrms;k = Hrms;
@@ -92,9 +82,7 @@ function [wavhyd]=crossshorewaves(in,i,bathy);
         %   %disp(['iter h(j) M(j) ',num2str(iter),'  ',num2str(h(j)),'  ',num2str(M(j))])
         %   h(j) = sqrt(M(j)/(in.A0*9.81));
         % end
-        %loss = (in.cf(j)+dzbdx(j))*in.dx/(2*A0);
-        loss = (in.cf(j)+(h(j-1)>0)*dzbdx(j))*in.dx/(2*in.A0);
-        h(j) = max(h(j-1)-loss,0);
+        h(j) = max(h(j-1)-(in.cf(j)+dzbdx(j))*in.dx/(2*in.A0),0);
         Hrms(j) = in.gamma*h(j);
         M(j) = in.A0*9.81*(Hrms(j)/in.gamma)^2;
         eta(j) = bathy.zb(j)+h(j);
@@ -111,29 +99,23 @@ function [wavhyd]=crossshorewaves(in,i,bathy);
     
     
     %find runup values
-    % z_rw = bathy.zb+in.rwh;
-    % sig_eta = Hrms/sqrt(8);
+    z_rw = bathy.zb+in.rwh;
+    sig_eta = Hrms/sqrt(8);
 
-    % x1 = interp_brad(bathy.x,eta+sig_eta-z_rw);
-    % z1 = interp1(bathy.x,eta+sig_eta,x1);
-    % x2 = interp_brad(bathy.x,eta-z_rw);
-    % z2 = interp1(bathy.x,eta,x2);
-    % x3 = interp_brad (bathy.x,eta-sig_eta-z_rw);
-    % z3 = interp1(bathy.x,eta-sig_eta,x3);
-    % alternate formulation using max wetted node as runup position
-    %[j1]=min(h==0);
-    j1=min(find(h==0));
-    wavhyd.runup_2p_x = bathy.x(j1);  
-    wavhyd.runup_2p  = bathy.zb(j1);  
-    %wavhyd.runup_2p  
+    x1 = interp_brad(bathy.x,eta+sig_eta-z_rw);
+    z1 = interp1(bathy.x,eta+sig_eta,x1);
+    x2 = interp_brad(bathy.x,eta-z_rw);
+    z2 = interp1(bathy.x,eta,x2);
+    x3 = interp_brad (bathy.x,eta-sig_eta-z_rw);
+    z3 = interp1(bathy.x,eta-sig_eta,x3);
     
     dzbdxdum = 0;
-    %wavhyd.runup_mean  = (z1+z2+z3)/3;
-    %wavhyd.runup_std   = (z1-z3)/2;
-    %wavhyd.runup_13    = wavhyd.runup_mean +(2+0*dzbdxdum)*wavhyd.runup_std;
-    %wavhyd.runup_2p    = wavhyd.runup_mean + 1.4*(wavhyd.runup_13-wavhyd.runup_mean);
-    %wavhyd.runup_mean_x= interp_brad(bathy.x,wavhyd.runup_mean-bathy.zb);
-    %wavhyd.runup_2p_x  = interp_brad(bathy.x,wavhyd.runup_2p-bathy.zb);
+    wavhyd.runup_mean  = (z1+z2+z3)/3;
+    wavhyd.runup_std   = (z1-z3)/2;
+    wavhyd.runup_13    = wavhyd.runup_mean +(2+0*dzbdxdum)*wavhyd.runup_std;
+    wavhyd.runup_2p    = wavhyd.runup_mean + 1.4*(wavhyd.runup_13-wavhyd.runup_mean);
+    wavhyd.runup_mean_x= interp_brad(bathy.x,wavhyd.runup_mean-bathy.zb);
+    wavhyd.runup_2p_x  = interp_brad(bathy.x,wavhyd.runup_2p-bathy.zb);
     wavhyd.h           = h;
     wavhyd.xsws        = xsws;
     wavhyd.hsws        = interp1(bathy.x,h,xsws);
@@ -153,9 +135,6 @@ function [wavhyd]=crossshorewaves(in,i,bathy);
     wavhyd.c           = c;
     wavhyd.k           = k;
     wavhyd.iswash      = iswash;
-    wavhyd.A0          = in.A0;
-    wavhyd.Ib          = ib;
-    wavhyd.tanbeta     = tanbeta_foreshore;
 
 
     

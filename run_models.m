@@ -9,12 +9,12 @@ g.name = 'frf_runup';
 addpath(g.name)
 
 % Model model choices
-g.icshore   = 0;
+g.icshore   = 1;
 g.icshorem  = 1;
 g.ixbeach   = 0;
 g.icms      = 0;
 g.ifunwave  = 0;
-g.istockdon = 0;
+g.istockdon = 1;
 
 
 %set some input params like timing and bc's

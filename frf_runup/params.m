@@ -19,7 +19,7 @@ for j = lidar_inds
   in(i).gamma  = .7;         % shallow water ratio of wave height to water depth
   in(i).fric_fac = .015;     % bottom friction factor
   in(i).lidar_ind = j;
-
+ 
   bnd_gage_num = 1;
   date_bc = lidar_sm(j).date;
   in(i).date = date_bc;
@@ -30,9 +30,11 @@ for j = lidar_inds
   in(i).angle = interp1(wave(bnd_gage_num).time,wave(bnd_gage_num).Dm_wrtfrf,date_bc);
   in(i).swlbc = interp1(wl.date,wl.wl,date_bc);
   x_offset =  wave(bnd_gage_num).frf_x;
-  x_frf = x_offset:-in(i).dx:40;
+  x_frf = x_offset:-in(i).dx:50;
   x = x_offset-x_frf;
-  zb = interp1(lidar_sm(j).frf_xi,lidar_sm(j).zb_full_bar_track,x_frf);
+  zb = interp1(lidar_sm(j).frf_xi,lidar_sm(j).zb_full,x_frf);
+  %  zb = interp1(lidar_sm(j).frf_xi,lidar_sm(j).zb_full_bar_track,x_frf);
+  in(i).x_offset = x_offset;
   in(i).x = x;
   in(i).zb = zb;
   in(i).fw = in(i).fric_fac*ones(size(in(i).zb)); % cross-shore values of bot fric
@@ -45,8 +47,8 @@ for j = lidar_inds
   inds = find(abs(x-dat(i).sws)<L0);
   dzbdx = cdiff(in(i).dx,zb);
   in(i).beta_f = mean(dzbdx(inds));
-  in(i).Ib = iribarren ([in(i).Hrms]*sqrt(2),[in(i).Tp],[in(i).beta_f]);
-
+  %in(i).Ib = iribarren ([in(i).Hrms]*sqrt(2),[in(i).Tp],[in(i).beta_f]);
+  in(i).A0 = 3.8;
 
 end
 
